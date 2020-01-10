@@ -30,3 +30,4 @@ python-api/dist
 *.egg
 
 /venv
+.cfg

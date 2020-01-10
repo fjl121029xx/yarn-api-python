@@ -11,15 +11,19 @@ import threading
 import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 
+import js2xml
+
 
 def demo():
-    response = urllib.request.urlopen("http://hbi-aliyun-02.ali-bj:8088/proxy/application_1577946422212_0007/")
+    response = urllib.request.urlopen("http://bi-olap1.sm02:8088/proxy/application_1577782923209_0044/")
     jsonstring = response.read().decode()
+    # print(jsonstring)
     soup = BeautifulSoup(jsonstring, "html.parser")
     activeJobList = []
     tables = soup.find_all('table')
     for table in tables:
-        if table.get("id") == "activeJob-table":
+        # if table.get("id") == "activeJob-table":
+        if table.get("id") == "completedJob-table":
             table_soup = BeautifulSoup(str(table), "html.parser")
             trs = table_soup.find_all('tr')
             for tr in trs:
@@ -36,16 +40,16 @@ def demo():
                 trui.append(tds[5].get_text().strip())
                 activeJobList.append(trui)
                 #  job 执行不能超过2.5 min
-                if (duration == '2.5 min'):
-                    # /proxy/application_1577946422212_0007/jobs/job/kill/?id=
-                    response = urllib.request.urlopen(
-                        "http://hbi-aliyun-02.ali-bj:8088/proxy/application_1577946422212_0007/jobs/job/kill/?id=" + jodId)
-                    jsonstring = response.read().decode()
-                    print("job 执行不能超过2.5 min , jodId（" + jodId + "） 被restful 杀死")
-                    soup = BeautifulSoup(jsonstring, "html.parser")
-                    print(soup.find("span", {"class": "description-input"}))
+                # if (duration == '2.5 min'):
+                #     # /proxy/application_1577946422212_0007/jobs/job/kill/?id=
+                #     response = urllib.request.urlopen(
+                #         "http://hbi-aliyun-02.ali-bj:8088/proxy/application_1577946422212_0007/jobs/job/kill/?id=" + jodId)
+                #     jsonstring = response.read().decode()
+                #     print("job 执行不能超过2.5 min , jodId（" + jodId + "） 被restful 杀死")
+                #     soup = BeautifulSoup(jsonstring, "html.parser")
+                #     print(soup.find("span", {"class": "description-input"}))
             break
-    return activeJobList
+    return activeJobList[0]
 
 
 def yarnscheduler():
