@@ -17,22 +17,21 @@ read_dohkosessionConf = {
     "numExecutors": 1,
     "queue": 'default',
     "heartbeatTimeoutInSecond": 86400,
-    "proxyUser": 'yqs',
+    "proxyUser": None,
     'conf': {
         "spark.default.parallelism": 12,
         "spark.rdd.compress": True,
-        "spark.submit.deployMode": "cluster",
         "spark.io.compression.codec": "snappy"
     }
 }
 
 read_productsession = {"jars": ["hdfs://cluster/yqs/tools/engine-0.0.1-SNAPSHOT.jar"], "pyFiles": [], "files": [],
                        "archives": [], "kind": "spark",
-                       "driverMemory": '20g',
-                       "driverCores": 8,
-                       "executorMemory": '14g',
+                       "driverMemory": '11g',
+                       "driverCores": 1,
+                       "executorMemory": '11g',
                        "executorCores": 6,
-                       "numExecutors": 36,
+                       "numExecutors": 17,
                        "queue": "default",
                        "heartbeatTimeoutInSecond": 86400,
                        "proxyUser": None,
@@ -52,11 +51,11 @@ write_productsession = {
     "files": [],
     "archives": [],
     "kind": 'spark',
-    "driverMemory": '2g',
-    "driverCores": 2,
-    "executorMemory": '5g',
-    "executorCores": 4,
-    "numExecutors": 5,
+    "driverMemory": '10g',
+    "driverCores": 1,
+    "executorMemory": '10g',
+    "executorCores": 3,
+    "numExecutors": 3,
     "queue": 'default',
     "heartbeatTimeoutInSecond": 86400,
     "proxyUser": None,
@@ -75,7 +74,7 @@ write_productsession = {
         "spark.sql.hive.convertMetastoreOrc": True,
         "spark.sql.orc.filterPushdown": True,
         "spark.sql.orc.char.enabled": True,
-        "spark.submit.deployMode": "cluster",
+        # "spark.submit.deployMode": "cluster",
         "spark.driver.extraJavaOptions": "-Dhdp.version=3.0.1.0-187",
         "spark.executor.extraJavaOptions": "-Dhdp.version=3.0.1.0-187"
     }
@@ -86,11 +85,12 @@ type = 0
 if type == 0:
     sessionConf = read_productsession
     sessionConf["name"] = 'YQS_Read_App'
-else:
+else:   
     sessionConf = write_productsession
+    # sessionConf["name"] = 'CESHIAO'
     sessionConf["name"] = 'YQS_Write_App'
 
-headers = {'X-Requested-By': 'admin'}
+headers = {'X-Requested-By': 'livy'}
 try:
     # print(sessionConf)
     # response = requests.post('http://172.20.44.6:8999/sessions/', data=json.dumps(sessionConf), headers=headers)
